@@ -43,7 +43,7 @@ class AdminLoginController extends Controller
             ->withErrors($validator)
             ->withInput($request->only('email'));
         }
-    }
+    }  
 
-    
+
 }
