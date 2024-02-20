@@ -97,7 +97,7 @@
                             </td>
                             <td>
                                 <a
-                                    href="{{route('categories.edit',$subCategory->id)}}">
+                                    href="{{route('sub-categories.edit',$subCategory->id)}}">
                                     <svg class="filament-link-icon w-4 h-4 mr-1"
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20" fill="currentColor"
@@ -108,7 +108,7 @@
                                     </svg>
                                 </a>
                                 <a href="#"
-                                    onclick="deleteCategory({{ $subCategory->id }})"
+                                    onclick="deleteSubCategory({{ $subCategory->id }})"
                                     class="text-danger w-4 h-4 mr-1">
                                     <svg wire:loading.remove.delay wire:target
                                         class="filament-link-icon w-4 h-4 mr-1"
@@ -147,9 +147,9 @@
 @section('customJs')
 <script>
     
-    function deleteCategory(id){
+    function deleteSubCategory(id){
 
-        var url = '{{ route("categories.delete","ID")}}';
+        var url = '{{ route("sub-categories.delete","ID")}}';
         var newUrl = url.replace("ID", id); //replace the ID by the id from delete function
         
         if(confirm("Are you sure you want to delete?")){
@@ -163,11 +163,11 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response){
-                
-                    if(response["status"] ){ //redirect if status is either true or false
+                    window.location.href="{{route('sub-categories.index')}}";
+                    // if(response["status"] ){ //redirect if status is either true or false
 
-                        window.location.href="{{route('categories.index')}}"; //redirect after submitting
-                    } 
+                    //     window.location.href="{{route('sub-categories.index')}}"; //redirect after submitting
+                    // } 
                 }
             });
         }
