@@ -70,17 +70,17 @@ class BrandController extends Controller
 
         $validator =  Validator::make($request->all(),[
             'name' => 'required',
-            'slug' => 'required|unique:brands,slug,'.$brand->id.',id',
+            'slug' => 'required|unique:brands,slug,'.$brand->id.',id'
 
 
        ]);
 
        if($validator->passes()){
-        $brand = new Brand();
+       
         $brand->name = $request->name;
         $brand->slug = $request->slug;
         $brand->status = $request->status;
-        $brand->save();
+        $brand->save(); //This updateds the fields
 
         return response()->json([
             'status' => true,
