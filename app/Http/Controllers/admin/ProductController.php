@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\admin;
 
+use Image;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\TempImage;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -12,6 +15,9 @@ use Illuminate\Support\Facades\Validator;
 class ProductController extends Controller
 {
     //
+    public function index(){
+        
+    }
     public function create(){
         $data = [];
         $categories = Category::orderBy('name','ASC')->get();
@@ -21,6 +27,8 @@ class ProductController extends Controller
         return view('admin.products.create', $data);
     }
     public function store(Request $request){
+        // dd($request->image_array);
+        // exit();
         $rules = [
             'title' => 'required',
             'slug' => 'required|unique:products',
@@ -54,6 +62,46 @@ class ProductController extends Controller
             $product->brand_id = $request->brand;
             $product->is_featured = $request->is_featured;
             $product->save();
+
+            //save gallery pics
+            if(!empty($request->image_array)){
+                foreach($request->image_array as $temp_image_id){
+                    $tempImageInfo = TempImage::find($temp_image_id);
+                    $extArray = explode('.',$tempImageInfo->name);
+                    $ext = last($extArray); //like jpg,gif,png etc
+
+                    $productImage = new ProductImage();
+                    $productImage->product_id = $product->id;
+                    $productImage->image = 'NULL';
+                    $productImage->save();
+
+                    $imageName = $product->id.'-'.$productImage->id.'-'.time().'.'.$ext;
+                    //product_id=>4; product_image_id => 1
+                    //name: 4-1-12345.jpg   Now this will become unique
+
+                    $productImage->image = $imageName;
+                    $productImage->save();
+
+                    //Generate product Thumbnails
+
+                    //Large Image
+                    $sourcePath = public_path().'/temp/'.$tempImageInfo->name;
+                    $destPath = public_path().'/uploads/product/large/'.$tempImageInfo->name;
+                    $image = Image::make($sourcePath);
+                    $image->resize(1400, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    }); //to maintain image aspect ratio
+                    $image->save($destPath);
+
+
+                    //Small image
+                   
+                    $destPath = public_path().'/uploads/product/small/'.$tempImageInfo->name;
+                    $image = Image::make($sourcePath);
+                    $image->fit(300, 300); //for fixed thumbnails
+                    $image->save($destPath);
+                }
+            }
 
             $request->session()->flash('success','Product added successfully');
 
