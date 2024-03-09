@@ -29,7 +29,8 @@
                                     <option value=""> Select a category </option>
                                     @if($categories->isNotEmpty())
                                     @foreach( $categories as $category )
-                                    <option {{ ( $subCategory->category_id == $category->id) ? 'selected' : '' }} value="{{ $category->id }}">{{$category->name}}</option>
+                                    <option {{ ( $subCategory->category_id == $category->id) ? 'selected' : '' }}
+                                        value="{{ $category->id }}">{{$category->name}}</option>
 
                                     @endforeach
                                     @endif
@@ -40,7 +41,8 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="name">Name</label>
-                                <input type="text" name="name" id="name" class="form-control" placeholder="Name" value="{{$subCategory->name}}">
+                                <input type="text" name="name" id="name" class="form-control" placeholder="Name"
+                                    value="{{$subCategory->name}}">
                                 <p></p>
 
                             </div>
@@ -48,7 +50,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="slug">Slug</label>
-                                <input type="text" readonly name="slug" id="slug" class="form-control"
+                                <input type="text" name="slug" id="slug" class="form-control"
                                     placeholder="Slug" value="{{$subCategory->slug}}">
                                 <p></p>
 
@@ -58,11 +60,24 @@
                             <div class="mb-3">
                                 <label for="status">Status</label>
                                 <select name="status" id="status" class="form-control">
-                                    <option {{ ( $subCategory->status == 1) ? 'selected' : '' }}  value="1" >Active</option>
-                                    <option {{ ( $subCategory->status == 0) ? 'selected' : '' }} value="0">Block</option>
+                                    <option {{ ( $subCategory->status == 1) ? 'selected' : '' }} value="1">Active
+                                    </option>
+                                    <option {{ ( $subCategory->status == 0) ? 'selected' : '' }} value="0">Block
+                                    </option>
                                 </select>
                                 <p></p>
 
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="showHome">Show on Home</label>
+                                <select name="showHome" id="showHome" class="form-control">
+                                    <option {{ ($category->showHome == 'Yes' ) ? 'selected' : '' }} value="Yes">Yes
+                                    </option>
+                                    <option {{ ($category->showHome == 'No' ) ? 'selected' : '' }} value="No">No
+                                    </option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -97,7 +112,8 @@ $("#subCategoryForm").submit(function(event) {
 
             if (response["status"] == true) {
 
-                window.location.href = "{{route('sub-categories.index')}}"; //redirect after submitting
+                window.location.href =
+                "{{route('sub-categories.index')}}"; //redirect after submitting
 
                 $("#name").removeClass('is-invalid')
                     .siblings('p').
@@ -114,8 +130,9 @@ $("#subCategoryForm").submit(function(event) {
 
             } else {
 
-                if(response['notFound'] == true){
-                    window.location.href="{{route('sub-categories.index')}}"; //what happens if the record is miising in databse 
+                if (response['notFound'] == true) {
+                    window.location.href =
+                    "{{route('sub-categories.index')}}"; //what happens if the record is miising in databse 
                 }
 
                 var errors = response['errors'];
