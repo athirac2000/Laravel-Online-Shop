@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\BrandController;
@@ -29,6 +30,8 @@ use App\Http\Controllers\admin\ProductSubCategoryController;
 // });
 
 Route::get('/',[FrontController::class,'index'])->name('front.home');
+Route::get('/shop',[ShopController::class,'index'])->name('front.shop');
+
 
 
 Route::group(['prefix'=>'admin'],function(){
