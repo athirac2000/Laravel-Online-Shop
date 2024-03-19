@@ -150,6 +150,7 @@
                                             placeholder="Barcode" value="{{$product->barcode}}">
                                     </div>
                                 </div>
+                                
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <div class="custom-control custom-checkbox">
@@ -171,6 +172,24 @@
 
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h2 class="h4 mb-3">Related Products</h2>
+                            <div class="mb-3">
+                                <!-- w-100 means width 100 % -->
+                                <select class="related-products w-100" name="related_products[]" id="related_products" multiple>
+                                    @if(!empty($relatedProducts))
+                                        @foreach($relatedProducts as $relProduct)
+                                            <option selected value="{{$relProduct->id}}">{{$relProduct->title}}</option>
+                                        @endforeach
+                                    @else
+                                    @endif
+                                </select>
+                                <p class="error"></p>
+
                             </div>
                         </div>
                     </div>
@@ -254,6 +273,7 @@
                             </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
 
@@ -271,6 +291,22 @@
 @section('customJs')
 
 <script>
+
+$('.related-products').select2({
+    ajax: {
+        url: '{{ route("products.getProducts") }}',
+        dataType: 'json',
+        tags: true,
+        multiple: true,
+        minimumInputLength: 3,
+        processResults: function (data) {
+            return {
+                results: data.tags
+            };
+        }
+    }
+}); 
+
 // the value of title field is used to get slug
 $("#title").change(function() {
     element = $(this);

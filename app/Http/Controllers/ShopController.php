@@ -86,7 +86,17 @@ class ShopController extends Controller
             abort(404); //wrong slug vannal error page kanikan
         }
 
+        $relatedProducts = [];
+        //fetch related products
+        if($product->related_products != ''){
+            $productArray = explode(',',$product->related_products);
+            $relatedProducts = Product::whereIn('id',$productArray)->with('product_images')->get();
+        }
+
         $data['product'] = $product;
+        $data['relatedProducts'] = $relatedProducts;
+
+
         return view('front.product', $data);
     }
 }
