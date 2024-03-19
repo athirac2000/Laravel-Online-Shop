@@ -79,4 +79,14 @@ class ShopController extends Controller
         
         return view('front.shop',$data);
     }
+
+    public function product($slug){
+        $product = Product::where('slug',$slug)->with('product_images')->first();
+        if($product == null){
+            abort(404); //wrong slug vannal error page kanikan
+        }
+
+        $data['product'] = $product;
+        return view('front.product', $data);
+    }
 }
