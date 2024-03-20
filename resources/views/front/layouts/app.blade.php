@@ -47,6 +47,9 @@
 
     <!-- Fav Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="#" />
+
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+
 </head>
 
 <body data-instant-intensity="mousedown">
@@ -240,6 +243,30 @@
             navbar.classList.remove("sticky");
         }
     }
+
+    // append csrf tocken to ajax
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    //add to cart is included in many pages, that is y this code written here
+    function addToCart(id){
+            $.ajax({
+                url: '{{route("front.addToCart")}}',
+                type: 'post',
+                data: {id:id},
+                dataType: 'json',
+                success: function(response){
+                    if(response.status == true){
+                        window.location.href="{{route('front.cart')}}"
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            });
+        }
     </script>
 
     @yield('customJs')
